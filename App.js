@@ -37,19 +37,23 @@ class MainScreen extends React.Component {
         paddingTop: 22
       },
       sectionHeader: {
-        paddingTop: 2,
+        paddingTop: 10,
         paddingLeft: 10,
         paddingRight: 10,
         paddingBottom: 2,
-        fontSize: 14,
+        fontSize: 24,
         fontWeight: 'bold',
         backgroundColor: 'rgba(247,247,247,1.0)',
       },
-      item: {
+      itemText: {
         padding: 10,
         fontSize: 18,
         height: 44,
       },
+      itemView: {
+        // todo - add border to the top on the first item
+        borderBottomWidth: StyleSheet.hairlineWidth,
+      }
     });
     const data = require('./sampleData.json');
     return (
@@ -64,7 +68,13 @@ class MainScreen extends React.Component {
                 {title: 'Logs', data: data.logs},
                 {title: 'Goals', data: data.goals},
               ]}
-              renderItem={({item}) => <Text style={styles.item}>{item.name}</Text>}
+              renderItem={({item}) => {
+                return (
+                  <View style={styles.itemView}>
+                    <Text style={styles.itemText}>{item.name}</Text>
+                  </View>
+                );
+              }}
               renderSectionHeader={({section}) => <Text style={styles.sectionHeader}>{section.title}</Text>}
               keyExtractor={(item, index) => index}
           />
