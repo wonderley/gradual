@@ -16,11 +16,11 @@ import {
   StatusBar,
   SectionList,
 } from 'react-native';
-import {createStackNavigator, createAppContainer} from 'react-navigation';
+import {createStackNavigator, createAppContainer, createBottomTabNavigator} from 'react-navigation';
 
-class MainScreen extends React.Component {
+class LogsScreen extends React.Component {
   static navigationOptions = {
-    title: 'Home',
+    title: 'Gradual',
     headerStyle: {
       backgroundColor: '#f4511e',
     },
@@ -40,7 +40,7 @@ class MainScreen extends React.Component {
         paddingTop: 10,
         paddingLeft: 10,
         paddingRight: 10,
-        paddingBottom: 2,
+        paddingBottom: 10,
         fontSize: 24,
         fontWeight: 'bold',
         backgroundColor: 'rgba(247,247,247,1.0)',
@@ -66,7 +66,6 @@ class MainScreen extends React.Component {
             <SectionList
               sections={[
                 {title: 'Logs', data: data.logs},
-                {title: 'Goals', data: data.goals},
               ]}
               renderItem={({item}) => {
                 return (
@@ -85,10 +84,18 @@ class MainScreen extends React.Component {
   }
 }
 
-const MainNavigator = createStackNavigator({
-  Main: {screen: MainScreen},
+const LogsNavigator = createStackNavigator({
+  Main: {screen: LogsScreen},
 });
 
-const App = createAppContainer(MainNavigator);
+const BottomTabNavigator = createBottomTabNavigator(
+  {
+    Logs: {
+      screen: LogsNavigator,
+    },
+  }
+);
+
+const App = createAppContainer(BottomTabNavigator)
 
 export default App;
