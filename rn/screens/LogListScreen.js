@@ -8,17 +8,19 @@ import {
   StatusBar,
   SectionList,
 } from 'react-native';
+import { Icon } from 'react-native-elements'
 
 class LogListScreen extends React.Component {
   static navigationOptions = {
-    title: 'Gradual',
+    title: '',
     headerStyle: {
-      backgroundColor: '#f4511e',
+      borderBottomWidth: 0,
     },
-    headerTintColor: '#fff',
     headerTitleStyle: {
       fontWeight: 'bold',
+      fontSize: 24,
     },
+    headerLeft: <Icon name='account-circle' size={40} containerStyle={{ paddingLeft: 8 }} />,
   };
 
   render() {
@@ -34,7 +36,6 @@ class LogListScreen extends React.Component {
         paddingBottom: 10,
         fontSize: 24,
         fontWeight: 'bold',
-        backgroundColor: 'rgba(247,247,247,1.0)',
       },
       itemText: {
         padding: 10,
