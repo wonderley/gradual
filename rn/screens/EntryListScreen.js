@@ -6,19 +6,14 @@ import {
   View,
   Text,
   StatusBar,
-  SectionList,
+  FlatList,
 } from 'react-native';
+import mainScreenNavOptions from './MainScreenNavOptions';
 
 class EntryListScreen extends React.Component {
   static navigationOptions = {
-    title: 'Gradual',
-    headerStyle: {
-      backgroundColor: '#f4511e',
-    },
-    headerTintColor: '#fff',
-    headerTitleStyle: {
-      fontWeight: 'bold',
-    },
+    title: 'Entries',
+    ...mainScreenNavOptions,
   };
 
   render() {
@@ -68,10 +63,8 @@ class EntryListScreen extends React.Component {
           <ScrollView
             contentInsetAdjustmentBehavior="automatic"
             style={styles.scrollView}>
-            <SectionList
-              sections={[
-                {title: 'Entries', data: entries},
-              ]}
+            <FlatList
+              data={entries}
               renderItem={({item}) => {
                 return (
                   <View style={styles.itemView}>
@@ -80,8 +73,7 @@ class EntryListScreen extends React.Component {
                   </View>
                 );
               }}
-              renderSectionHeader={({section}) => <Text style={styles.sectionHeader}>{section.title}</Text>}
-              keyExtractor={(item, index) => index}
+              keyExtractor={(item, index) => '' + index}
           />
           </ScrollView>
         </SafeAreaView>

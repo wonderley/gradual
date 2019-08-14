@@ -6,28 +6,22 @@ import {
   View,
   Text,
   StatusBar,
-  SectionList,
+  FlatList,
 } from 'react-native';
-import { Icon } from 'react-native-elements'
+import mainScreenNavOptions from './MainScreenNavOptions';
+import { black } from 'ansi-colors';
 
 class LogListScreen extends React.Component {
   static navigationOptions = {
-    title: '',
-    headerStyle: {
-      borderBottomWidth: 0,
-    },
-    headerTitleStyle: {
-      fontWeight: 'bold',
-      fontSize: 24,
-    },
-    headerLeft: <Icon name='account-circle' size={40} containerStyle={{ paddingLeft: 8 }} />,
+    title: 'Logs',
+    ...mainScreenNavOptions,
   };
 
   render() {
     const styles = StyleSheet.create({
       container: {
         flex: 1,
-        paddingTop: 22
+        paddingTop: 22,
       },
       sectionHeader: {
         paddingTop: 10,
@@ -42,34 +36,53 @@ class LogListScreen extends React.Component {
         fontSize: 18,
         height: 44,
       },
+      plusSignText: {
+        fontSize: 36,
+      },
       itemView: {
-        // todo - add border to the top on the first item
-        borderBottomWidth: StyleSheet.hairlineWidth,
+        height: 120,
+        borderColor: 'black',
+        borderWidth: StyleSheet.hairlineWidth,
+        margin: 5,
+        borderRadius: 3,
+      },
+      addItemView: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: 120,
+        borderColor: '#00331f',
+        borderWidth: StyleSheet.hairlineWidth,
+        margin: 5,
+        borderRadius: 3,
+        backgroundColor: '#ccffeb'
       }
     });
     const data = require('../sampleData.json');
     return (
       <Fragment>
         <StatusBar barStyle="dark-content" />
-        <SafeAreaView>
-          <ScrollView
-            contentInsetAdjustmentBehavior="automatic"
-            style={styles.scrollView}>
-            <SectionList
-              sections={[
-                {title: 'Logs', data: data.logs},
-              ]}
-              renderItem={({item}) => {
+        <SafeAreaView style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
+          <FlatList
+            alwaysBounceVertical={false}
+            data={[...data.logs, { isAddButton: true }]}
+            renderItem={({item}) => {
+              if (item.name) {
                 return (
                   <View style={styles.itemView}>
                     <Text style={styles.itemText}>{item.name}</Text>
                   </View>
                 );
-              }}
-              renderSectionHeader={({section}) => <Text style={styles.sectionHeader}>{section.title}</Text>}
-              keyExtractor={(item, index) => index}
+              } else if (item.isAddButton) {
+                return (
+                  <View style={styles.addItemView}>
+                    <Text style={styles.itemText}>Start a new log!</Text>
+                    <Text style={styles.plusSignText}>+</Text>
+                  </View>
+                ); 
+              }
+            }}
+            keyExtractor={(_, index) => '' + index}
           />
-          </ScrollView>
         </SafeAreaView>
       </Fragment>
     );
