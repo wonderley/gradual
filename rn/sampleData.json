@@ -12,6 +12,7 @@
           "name": "minutes"
         }
       ],
+      "icon": "directions-run",
       "description": "I want to run consistently to improve my cardio.",
       "entries": [
         {
@@ -39,9 +40,8 @@
           "created": "2019-07-29T07:30:05",
           "frequency": {
             "unit": "week",
-            "count": 1
+            "count": 5
           },
-          "count": 5,
           "values": {
             "distance": 10
           }
@@ -58,6 +58,7 @@
         }
       ],
       "description": "I want to study Spanish every day to improve my vocabulary and speaking skills.",
+      "icon": "local-library",
       "entries": [
         {
           "id": "2",

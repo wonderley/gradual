@@ -10,4 +10,5 @@ export default mainScreenNavOptions = {
     fontSize: 24,
   },
   headerLeft: <Icon name='account-circle' size={40} containerStyle={{ paddingLeft: 8 }} />,
+  headerRight: <Icon name='add' size={40} containerStyle={{ paddingRight: 8 }} />,
 };

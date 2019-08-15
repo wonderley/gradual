@@ -2,20 +2,21 @@ import React, {Fragment} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
-  ScrollView,
   View,
   Text,
   StatusBar,
   FlatList,
 } from 'react-native';
 import mainScreenNavOptions from './MainScreenNavOptions';
-import { black } from 'ansi-colors';
+import { Icon } from 'react-native-elements';
 
 class LogListScreen extends React.Component {
   static navigationOptions = {
     title: 'Logs',
     ...mainScreenNavOptions,
   };
+
+  static logColors = [ '#FBA575', '#A8B9FA' ];
 
   render() {
     const styles = StyleSheet.create({
@@ -31,10 +32,15 @@ class LogListScreen extends React.Component {
         fontSize: 24,
         fontWeight: 'bold',
       },
-      itemText: {
-        padding: 10,
-        fontSize: 18,
-        height: 44,
+      itemTitleText: {
+        fontSize: 24,
+        height: 36,
+        fontWeight: 'bold',
+      },
+      itemSubText: {
+        height: 24,
+        fontSize: 14,
+        fontWeight: 'bold',
       },
       plusSignText: {
         fontSize: 36,
@@ -45,16 +51,16 @@ class LogListScreen extends React.Component {
         borderWidth: StyleSheet.hairlineWidth,
         margin: 5,
         borderRadius: 3,
+        padding: 10,
       },
       addItemView: {
         alignItems: 'center',
         justifyContent: 'center',
         height: 120,
-        borderColor: '#00331f',
         borderWidth: StyleSheet.hairlineWidth,
         margin: 5,
         borderRadius: 3,
-        backgroundColor: '#ccffeb'
+        backgroundColor: '#73FFC8'
       }
     });
     const data = require('../sampleData.json');
@@ -65,18 +71,33 @@ class LogListScreen extends React.Component {
           <FlatList
             alwaysBounceVertical={false}
             data={[...data.logs, { isAddButton: true }]}
-            renderItem={({item}) => {
+            renderItem={({ item, index }) => {
               if (item.name) {
                 return (
-                  <View style={styles.itemView}>
-                    <Text style={styles.itemText}>{item.name}</Text>
+                  <View style={{
+                    ...styles.itemView,
+                    backgroundColor: LogListScreen.logColors[index]
+                  }}>
+                    <View style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                    }}>
+                      <View>
+                        <Text style={styles.itemTitleText}>{item.name}</Text>
+                        <Text style={styles.itemSubText}>{this.textSummaryForGoals(item.goals)}</Text>
+                        <Text style={styles.itemSubText}>Updated April 3rd</Text>
+                      </View>
+                      <Icon name={item.icon} size={40} containerStyle={{
+                        width: 50,
+                      }} />
+                    </View>
                   </View>
                 );
               } else if (item.isAddButton) {
                 return (
                   <View style={styles.addItemView}>
-                    <Text style={styles.itemText}>Start a new log!</Text>
-                    <Text style={styles.plusSignText}>+</Text>
+                    <Text style={styles.itemTitleText}>Start a new log!</Text>
+                    <Icon name='add' size={40} containerStyle={{ paddingRight: 8 }} />
                   </View>
                 ); 
               }
@@ -87,6 +108,21 @@ class LogListScreen extends React.Component {
       </Fragment>
     );
   }
+
+  textSummaryForGoals(goals) {
+    // e.g. Once a day, Three times a week
+    if (!goals.length) {
+      return '';
+    }
+    const goal = goals[0];
+    return `${LogListScreen.frequencyMap[goal.frequency.count - 1]} `
+           + (goal.frequency.count > 2 ? 'times a ' : '')
+           + goal.frequency.unit;
+  }
+
+  static frequencyMap = [
+    'Every', 'Twice a', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten'
+  ];
 }
 
 
