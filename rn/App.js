@@ -1,6 +1,7 @@
 import {createStackNavigator, createAppContainer, createBottomTabNavigator} from 'react-navigation';
 import EntryListScreen from './screens/EntryListScreen';
 import LogListScreen from './screens/LogListScreen';
+import LogDetailScreen from './screens/LogDetailScreen';
 
 const EntriesNavigator = createStackNavigator({
   Main: { screen: EntryListScreen },
@@ -8,6 +9,7 @@ const EntriesNavigator = createStackNavigator({
 
 const LogsNavigator = createStackNavigator({
   Main: { screen: LogListScreen },
+  LogDetailScreen: { screen: LogDetailScreen },
 });
 
 const BottomTabNavigator = createBottomTabNavigator(
