@@ -8,10 +8,18 @@ import {
   StatusBar,
   FlatList,
 } from 'react-native';
+import mainScreenNavOptions from './MainScreenNavOptions';
 
 class LogDetailScreen extends React.Component {
-  static navigationOptions = {
-    title: 'Log Detail Screen',
+  static navigationOptions = ({ navigation }) => {
+    return {
+      title: navigation.state.params.log.name,
+      headerStyle: {
+        backgroundColor: navigation.state.params.color,
+        ...mainScreenNavOptions.headerStyle,
+      },
+      headerTitleStyle: mainScreenNavOptions.headerTitleStyle,
+    };
   };
 
   render() {

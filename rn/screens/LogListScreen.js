@@ -75,10 +75,10 @@ class LogListScreen extends React.Component {
             renderItem={({ item, index }) => {
               if (item.name) {
                 return (
-                  <TouchableOpacity activeOpacity={.75} onPress={this.onPressButton.bind(this)}>
+                  <TouchableOpacity activeOpacity={.75} onPress={this.itemSelected.bind(this, item, LogListScreen.logColors[index])}>
                     <View style={{
                       ...styles.itemView,
-                      backgroundColor: LogListScreen.logColors[index]
+                      backgroundColor: LogListScreen.logColors[index],
                     }}>
                       <View style={{
                         flexDirection: 'row',
@@ -100,7 +100,7 @@ class LogListScreen extends React.Component {
                 );
               } else if (item.isAddButton) {
                 return (
-                  <TouchableOpacity activeOpacity={.75} onPress={this.onPressButton.bind(this)}>
+                  <TouchableOpacity activeOpacity={.75}>
                     <View style={styles.addItemView}>
                       <Text style={styles.itemTitleText}>Start a new log!</Text>
                       <Icon name='add' size={40} containerStyle={{ paddingRight: 8 }} />
@@ -116,8 +116,11 @@ class LogListScreen extends React.Component {
     );
   }
 
-  onPressButton() {
-    this.props.navigation.navigate('LogDetailScreen', { name: 'Jordan' });
+  itemSelected(item, color) {
+    this.props.navigation.navigate('LogDetailScreen', {
+      color,
+      log: item,
+    });
   }
 
   textSummaryForGoals(goals) {
