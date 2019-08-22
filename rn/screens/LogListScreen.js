@@ -10,14 +10,13 @@ import {
 } from 'react-native';
 import mainScreenNavOptions from './MainScreenNavOptions';
 import { Icon } from 'react-native-elements';
+import Utils from '../utils/Utils';
 
 class LogListScreen extends React.Component {
   static navigationOptions = {
     title: 'Logs',
     ...mainScreenNavOptions,
   };
-
-  static logColors = [ '#FBA575', '#A8B9FA' ];
 
   render() {
     const styles = StyleSheet.create({
@@ -75,10 +74,10 @@ class LogListScreen extends React.Component {
             renderItem={({ item, index }) => {
               if (item.name) {
                 return (
-                  <TouchableOpacity activeOpacity={.75} onPress={this.itemSelected.bind(this, item, LogListScreen.logColors[index])}>
+                  <TouchableOpacity activeOpacity={.75} onPress={this.itemSelected.bind(this, item)}>
                     <View style={{
                       ...styles.itemView,
-                      backgroundColor: LogListScreen.logColors[index],
+                      backgroundColor: item.color,
                     }}>
                       <View style={{
                         flexDirection: 'row',
@@ -116,9 +115,8 @@ class LogListScreen extends React.Component {
     );
   }
 
-  itemSelected(item, color) {
+  itemSelected(item) {
     this.props.navigation.navigate('LogDetailScreen', {
-      color,
       log: item,
     });
   }
@@ -137,13 +135,7 @@ class LogListScreen extends React.Component {
   latestUpdateText(entries) {
     if (!entries.length) return '';
     const timestamp = entries[entries.length-1].timestamp;
-    const date = new Date(timestamp);
-    // e.g. Mon Jul 29 2019
-    let dateString = date.toDateString();
-    if (date.getFullYear() === (new Date).getFullYear()) {
-      // Don't show the year if it's the current year
-      dateString = dateString.split(' ').slice(0, -1).join(' ');
-    }
+    const dateString = Utils.timestampToDateString(timestamp);
     return `Updated ${dateString}`;
   }
 

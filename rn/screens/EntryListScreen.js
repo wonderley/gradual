@@ -9,6 +9,7 @@ import {
   FlatList,
 } from 'react-native';
 import mainScreenNavOptions from './MainScreenNavOptions';
+import Utils from '../utils/Utils';
 
 class EntryListScreen extends React.Component {
   static navigationOptions = {
@@ -47,6 +48,7 @@ class EntryListScreen extends React.Component {
         const entryData = log.entries.map(entry => {
           return {
             logName: log.name,
+            logColor: log.color,
             logValues: log.values,
             ...entry,
           };
@@ -55,27 +57,41 @@ class EntryListScreen extends React.Component {
       } else {
         return entriesArr;
       }
-    }, []); 
+    }, []);
+    // array of { dateString: String, entries: entry[]) }
+    const entriesByDate = entries.reduce((entriesByDate, entry) => {
+      const dateString = Utils.timestampToDateString(entry.timestamp);
+      const currentDateAndEntry = entriesByDate[entriesByDate.length - 1];
+      let dateAndEntry;
+      if (currentDateAndEntry &&
+          dateString !== currentDateAndEntry.dateString) {
+        currentDateAndEntry.entries.push(entry);
+      } else {
+        // Create a new dateAndEntry
+        entriesByDate.push({ dateString, entries: [entry] });
+      }
+      return entriesByDate;
+    }, []);
     return (
       <Fragment>
         <StatusBar barStyle="dark-content" />
         <SafeAreaView>
-          <ScrollView
-            contentInsetAdjustmentBehavior="automatic"
-            style={styles.scrollView}>
-            <FlatList
-              data={entries}
-              renderItem={({item}) => {
-                return (
-                  <View style={styles.itemView}>
-                    <Text style={styles.itemText}>{item.logName}</Text>
-                    <Text style={styles.itemText}>{item.timestamp}</Text>
-                  </View>
-                );
-              }}
-              keyExtractor={(item, index) => '' + index}
-          />
-          </ScrollView>
+          <FlatList
+            data={entries}
+            renderItem={({item}) => {
+              return (
+                <View
+                  style={{
+                    backgroundColor: item.logColor,
+                    ...styles.itemView
+                  }}>
+                  <Text style={styles.itemText}>{item.logName}</Text>
+                  <Text style={styles.itemText}>{Utils.timestampToDateString(item.timestamp)}</Text>
+                </View>
+              );
+            }}
+            keyExtractor={(item, index) => '' + index}
+        />
         </SafeAreaView>
       </Fragment>
     );

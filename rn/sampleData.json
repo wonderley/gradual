@@ -12,6 +12,7 @@
           "name": "minutes"
         }
       ],
+      "color": "#FBA575",
       "icon": "directions-run",
       "description": "I want to run consistently to improve my cardio.",
       "entries": [
@@ -58,6 +59,7 @@
         }
       ],
       "description": "I want to study Spanish every day to improve my vocabulary and speaking skills.",
+      "color": "#A8B9FA",
       "icon": "local-library",
       "entries": [
         {
