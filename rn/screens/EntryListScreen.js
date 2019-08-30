@@ -5,11 +5,11 @@ import {
   Text,
   StatusBar,
   SectionList,
-  TouchableOpacity,
 } from 'react-native';
 import mainScreenNavOptions from './MainScreenNavOptions';
 import Utils from '../utils/Utils';
 import Styles from './Styles';
+import EntryListItem from '../components/EntryListItem';
 
 class EntryListScreen extends React.Component {
   static navigationOptions = {
@@ -22,28 +22,25 @@ class EntryListScreen extends React.Component {
     const data = require('../sampleData.json');
     const entries = data.logs.reduce((entriesArr, log) => {
       if (log.entries) {
-        const entryData = log.entries.map(entry => {
-          return {
-            logName: log.name,
-            logColor: log.color,
-            ...entry,
-          };
+        const entryAndLog = log.entries.map(entry => {
+          return { entry, log };
         });
-        return entriesArr.concat(entryData);
+        return entriesArr.concat(entryAndLog);
       } else {
         return entriesArr;
       }
     }, []);
-    // array of { title: String, data: entry[]) }
-    const entriesByDate = entries.reduce((entriesByDate, entry) => {
+    // array of { title: String, data: entryAndLog[]) }
+    const entriesByDate = entries.reduce((entriesByDate, entryAndLog) => {
+      const { entry } = entryAndLog;
       const dateString = Utils.timestampToDateString(entry.timestamp);
       const currentDateAndEntry = entriesByDate[entriesByDate.length - 1];
       if (currentDateAndEntry &&
           dateString === currentDateAndEntry.title) {
-        currentDateAndEntry.data.push(entry);
+        currentDateAndEntry.data.push(entryAndLog);
       } else {
         // Create a new dateAndEntry
-        entriesByDate.push({ title: dateString, data: [entry] });
+        entriesByDate.push({ title: dateString, data: [entryAndLog] });
       }
       return entriesByDate;
     }, []);
@@ -54,26 +51,8 @@ class EntryListScreen extends React.Component {
           <SectionList
             data={entries}
             renderItem={({item, index, section}) => {
-              return (
-                <TouchableOpacity activeOpacity={.75} onPress={this.itemSelected.bind(this, item)}>
-                  <View
-                    style={{
-                      backgroundColor: item.logColor,
-                      borderTopWidth: (index === 0 ? styles.itemView.borderBottomWidth : null),
-                      ...styles.itemView
-                    }}>
-                    <Text style={styles.itemText}>
-                      {item.logName}
-                    </Text>
-                    <Text style={styles.itemText}>
-                      {Utils.timestampToDateString(item.timestamp)}
-                    </Text>
-                    <Text style={styles.itemText}>
-                      {this.entryValueSummary(item.values)}
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              );
+              return <EntryListItem navigation={this.props.navigation}
+                                    entry={item.entry} log={item.log} index={index} />
             }}
             renderSectionHeader={({ section: {title} }) => {
               return (
@@ -88,18 +67,6 @@ class EntryListScreen extends React.Component {
         </SafeAreaView>
       </Fragment>
     );
-  }
-
-  itemSelected(item) {
-    this.props.navigation.navigate('EntryDetailScreen', {
-      entry: item,
-    });
-  }
-
-  entryValueSummary(values) {
-    return Object.entries(values).map(([key, value]) => {
-      return `${value} ${key}`;
-    }).join(', ');
   }
 }
 

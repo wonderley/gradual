@@ -8,16 +8,15 @@ import {
 import mainScreenNavOptions from './MainScreenNavOptions';
 import Utils from '../utils/Utils';
 import Styles from './Styles';
-import { Icon } from 'react-native-elements';
 
 export default class EntryDetailScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
-    const { entry } = navigation.state.params;
+    const { entry, log } = navigation.state.params;
     // todo: center the title text
     return {
-      title: entry.logName,
+      title: log.name,
       headerStyle: {
-        backgroundColor: entry.logColor,
+        backgroundColor: log.color,
         ...mainScreenNavOptions.headerStyle,
       },
       headerTitleStyle: mainScreenNavOptions.headerTitleStyle,
@@ -25,7 +24,7 @@ export default class EntryDetailScreen extends React.Component {
   };
 
   render() {
-    const { entry } = this.props.navigation.state.params;
+    const { entry, log } = this.props.navigation.state.params;
     return (
       <Fragment>
         <StatusBar barStyle="dark-content" />

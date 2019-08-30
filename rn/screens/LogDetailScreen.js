@@ -7,9 +7,11 @@ import {
   Text,
   StatusBar,
   SectionList,
+  FlatList
 } from 'react-native';
 import mainScreenNavOptions from './MainScreenNavOptions';
 import styles from './Styles';
+import EntryListItem from '../components/EntryListItem';
 
 class LogDetailScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -25,6 +27,9 @@ class LogDetailScreen extends React.Component {
 
   render() {
     const log = this.props.navigation.state.params.log;
+    const entryItems = log.entries.map(entry => {
+      return { log, entry }
+    });
     return (
       <Fragment>
         <StatusBar barStyle="dark-content" />
@@ -37,7 +42,7 @@ class LogDetailScreen extends React.Component {
             sections={[
               { title: 'Recent Activity', data: [log.entries] },
               { title: 'Goal', data: log.goals.slice(0, 1) },
-              { title: 'Entries', data: log.entries },
+              { title: 'Entries', data: entryItems },
               /*{ title: 'Milestones', data: [] },*/
             ]}
             keyExtractor={this.keyExtractor.bind(this)}
@@ -71,7 +76,8 @@ class LogDetailScreen extends React.Component {
         </View>
       );
     } else if (title === 'Entries') {
-      return <Text key={`entry${index}`}>{JSON.stringify(item)}</Text>;
+      return <EntryListItem navigation={this.props.navigation}
+                            entry={item.entry} log={item.log} index={index} />;
     }
   }
 }

@@ -12,6 +12,7 @@ const EntriesNavigator = createStackNavigator({
 const LogsNavigator = createStackNavigator({
   Main: { screen: LogListScreen },
   LogDetailScreen: { screen: LogDetailScreen },
+  EntryDetailScreen: { screen: EntryDetailScreen },
 });
 
 const BottomTabNavigator = createBottomTabNavigator(
