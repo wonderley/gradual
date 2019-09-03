@@ -1,0 +1,3 @@
+[submodule "rn/react-native-chart-kit"]
+	path = rn/react-native-chart-kit
+	url = https://github.com/indiespirit/react-native-chart-kit/
