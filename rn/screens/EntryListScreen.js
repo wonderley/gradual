@@ -57,7 +57,7 @@ class EntryListScreen extends React.Component {
             renderSectionHeader={({ section: {title} }) => {
               return (
                 <View style={styles.sectionHeader}>
-                  <Text style={styles.sectionHeaderText}>{title}</Text>
+                  <Text style={styles.itemText}>{title}</Text>
                 </View>
               );
             }}

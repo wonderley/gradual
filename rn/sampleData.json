@@ -12,7 +12,7 @@
           "name": "minutes"
         }
       ],
-      "color": "#FBA575",
+      "color": "rgba(251, 163, 116, 1)",
       "icon": "directions-run",
       "description": "I want to run consistently to improve my cardio.",
       "entries": [

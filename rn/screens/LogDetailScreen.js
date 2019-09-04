@@ -1,17 +1,16 @@
 import React, {Fragment} from 'react';
 import {
   SafeAreaView,
-  StyleSheet,
-  ScrollView,
   View,
   Text,
   StatusBar,
   SectionList,
-  FlatList
+  Dimensions,
 } from 'react-native';
 import mainScreenNavOptions from './MainScreenNavOptions';
 import styles from './Styles';
 import EntryListItem from '../components/EntryListItem';
+import { BarChart } from 'react-native-chart-kit';
 
 class LogDetailScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -40,7 +39,7 @@ class LogDetailScreen extends React.Component {
               <Text style={styles.sectionTitleStyle}>{title}</Text>
             )}
             sections={[
-              { title: 'Recent Activity', data: [log.entries] },
+              { title: 'Recent Activity', data: [entryItems] },
               { title: 'Goal', data: log.goals.slice(0, 1) },
               { title: 'Entries', data: entryItems },
               /*{ title: 'Milestones', data: [] },*/
@@ -64,9 +63,37 @@ class LogDetailScreen extends React.Component {
   renderItem({item, index, section}) {
     const { title } = section;
     if (title === 'Recent Activity') {
-      return <View style={{
-        height: 250, width: '100%',
-      }}></View>;
+      const [{ log, entries }] = item;
+      const chartConfig = {
+        backgroundGradientFrom: log.color,
+        backgroundGradientTo: log.color,
+        decimalPlaces: 0,
+        color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+      };
+      const graphStyle = {
+        marginVertical: 8,
+        borderRadius: 16,
+        textStyle: styles.smallBoldText,
+      };
+      const screenWidth = Dimensions.get('window').width;
+      const data = {
+        labels: ['January', 'February', 'March', 'April'],
+        datasets: [{
+          data: [ 20, 45, 28, 80 ]
+        }],
+      }
+      return (
+        <View style={{ height: 250, width: screenWidth - 20 }}>
+          <BarChart
+            width={screenWidth - 20}
+            height={220}
+            data={data}
+            fromZero={true}
+            yAxisLabel={'$'}
+            chartConfig={chartConfig}
+            style={graphStyle} />
+        </View>
+      );
     }
     else if (title === 'Goal') {
       return (

@@ -14,6 +14,7 @@ const smallText = {
 const smallBoldText = {
   ...smallText,
   fontWeight: 'bold',
+  color: 'black',
 };
 export default styles = {
   sectionListStyle: {
@@ -39,10 +40,6 @@ export default styles = {
       paddingRight: 5,
       backgroundColor: 'white',
     },
-    sectionHeaderText: {
-      color: 'black',
-      ...smallBoldText,
-    }
   },
   smallBoldText,
 }
