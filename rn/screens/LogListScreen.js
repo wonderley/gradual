@@ -66,7 +66,6 @@ class LogListScreen extends React.Component {
     const data = require('../sampleData.json');
     return (
       <Fragment>
-        <StatusBar barStyle="dark-content" />
         <SafeAreaView style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
           <FlatList
             alwaysBounceVertical={false}
@@ -88,11 +87,14 @@ class LogListScreen extends React.Component {
                           <Text style={styles.itemSubText}>{this.textSummaryForGoals(item.goals)}</Text>
                           <Text style={styles.itemSubText}>{this.latestUpdateText(item.entries)}</Text>
                         </View>
-                          <Icon name={item.icon}
-                                size={40}
-                                containerStyle={{
-                                  width: 50,
-                                }} />
+                        <TouchableOpacity activeOpacity={.75} onPress={this.addEntrySelected.bind(this, item)}>
+                          <View style={{
+                            backgroundColor: 'white',
+                            width: 50,
+                            height: 50,
+                          }}>
+                          </View>
+                        </TouchableOpacity>
                       </View>
                     </View>
                   </TouchableOpacity>
@@ -117,6 +119,12 @@ class LogListScreen extends React.Component {
 
   itemSelected(item) {
     this.props.navigation.navigate('LogDetailScreen', {
+      log: item,
+    });
+  }
+
+  addEntrySelected(item) {
+    this.props.navigation.navigate('AddEntryScreen', {
       log: item,
     });
   }

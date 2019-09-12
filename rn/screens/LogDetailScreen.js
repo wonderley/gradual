@@ -31,7 +31,6 @@ class LogDetailScreen extends React.Component {
     });
     return (
       <Fragment>
-        <StatusBar barStyle="dark-content" />
         <SafeAreaView>
           <SectionList style={styles.sectionListStyle}
             renderItem={this.renderItem.bind(this)}
@@ -63,7 +62,8 @@ class LogDetailScreen extends React.Component {
   renderItem({item, index, section}) {
     const { title } = section;
     if (title === 'Recent Activity') {
-      const [{ log, entries }] = item;
+      const entriesWithLog = item;
+      const [{ log }] = entriesWithLog;
       const chartConfig = {
         backgroundGradientFrom: log.color,
         backgroundGradientTo: log.color,
@@ -75,11 +75,20 @@ class LogDetailScreen extends React.Component {
         borderRadius: 16,
         textStyle: styles.smallBoldText,
       };
+      const valueName = log.values[0].name;
       const screenWidth = Dimensions.get('window').width;
+      const entriesByDate =
+        Utils.entriesByDate(entriesWithLog, false /* showDayOfWeek */)
+             .slice(0, 4);
       const data = {
-        labels: ['January', 'February', 'March', 'April'],
+        labels: entriesByDate.map(({ date }) => date),
         datasets: [{
-          data: [ 20, 45, 28, 80 ]
+          data: entriesByDate.map(({ entries }) => {
+            // Aggregate same-day entries
+            return entries.reduce((total, entryAndLog) => {
+              return total + entryAndLog.entry.values[valueName];
+            }, 0);
+          }),
         }],
       }
       return (
@@ -89,7 +98,6 @@ class LogDetailScreen extends React.Component {
             height={220}
             data={data}
             fromZero={true}
-            yAxisLabel={'$'}
             chartConfig={chartConfig}
             style={graphStyle} />
         </View>

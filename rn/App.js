@@ -3,6 +3,7 @@ import EntryListScreen from './screens/EntryListScreen';
 import LogListScreen from './screens/LogListScreen';
 import LogDetailScreen from './screens/LogDetailScreen';
 import EntryDetailScreen from './screens/EntryDetailScreen';
+import AddEntryScreen from './screens/AddEntryScreen';
 
 const EntriesNavigator = createStackNavigator({
   Main: { screen: EntryListScreen },
@@ -13,6 +14,7 @@ const LogsNavigator = createStackNavigator({
   Main: { screen: LogListScreen },
   LogDetailScreen: { screen: LogDetailScreen },
   EntryDetailScreen: { screen: EntryDetailScreen },
+  AddEntryScreen: { screen: AddEntryScreen },
 });
 
 const BottomTabNavigator = createBottomTabNavigator(

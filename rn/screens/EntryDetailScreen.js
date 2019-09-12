@@ -12,7 +12,6 @@ import Styles from './Styles';
 export default class EntryDetailScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     const { entry, log } = navigation.state.params;
-    // todo: center the title text
     return {
       title: log.name,
       headerStyle: {
@@ -27,7 +26,6 @@ export default class EntryDetailScreen extends React.Component {
     const { entry, log } = this.props.navigation.state.params;
     return (
       <Fragment>
-        <StatusBar barStyle="dark-content" />
         <SafeAreaView>
           <View style={{ padding: 10 }}>
             <Text style={Styles.sectionTitleStyle}>

@@ -30,23 +30,15 @@ class EntryListScreen extends React.Component {
         return entriesArr;
       }
     }, []);
-    // array of { title: String, data: entryAndLog[]) }
-    const entriesByDate = entries.reduce((entriesByDate, entryAndLog) => {
-      const { entry } = entryAndLog;
-      const dateString = Utils.timestampToDateString(entry.timestamp);
-      const currentDateAndEntry = entriesByDate[entriesByDate.length - 1];
-      if (currentDateAndEntry &&
-          dateString === currentDateAndEntry.title) {
-        currentDateAndEntry.data.push(entryAndLog);
-      } else {
-        // Create a new dateAndEntry
-        entriesByDate.push({ title: dateString, data: [entryAndLog] });
-      }
-      return entriesByDate;
-    }, []);
+    const sections = Utils.entriesByDate(entries)
+      .map(({entries, date}) => {
+      return {
+        data: entries,
+        title: date,
+      };
+    });
     return (
       <Fragment>
-        <StatusBar barStyle="dark-content" />
         <SafeAreaView>
           <SectionList
             data={entries}
@@ -61,7 +53,7 @@ class EntryListScreen extends React.Component {
                 </View>
               );
             }}
-            sections={entriesByDate}
+            sections={sections}
             keyExtractor={(item, index) => '' + index}
         />
         </SafeAreaView>
