@@ -9,22 +9,9 @@
  */
 
 import React from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-} from 'react-native';
+import {SafeAreaView, StyleSheet, View, Text, StatusBar} from 'react-native';
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
 
 declare var global: {HermesInternal: null | {}};
 
@@ -36,10 +23,9 @@ const App = () => {
         <View style={styles.header}>
           <Text style={styles.sectionTitle}>Thursday, April 9th</Text>
         </View>
-        <View>
-          <View style={styles.initialTip}>
-            <Text style={styles.sectionTitle}>Add some stuff!</Text>
-          </View>
+        <View style={styles.initialTip}>
+          <Text style={styles.sectionTitle}>Welcome to Gradual!</Text>
+          <Text style={styles.sectionTitle}>Add a task to get started.</Text>
         </View>
       </SafeAreaView>
     </>
@@ -49,7 +35,6 @@ const App = () => {
 const styles = StyleSheet.create({
   header: {
     display: 'flex',
-    marginTop: 32,
     paddingHorizontal: 24,
     justifyContent: 'center',
     alignItems: 'center',
