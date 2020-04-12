@@ -15,6 +15,8 @@ import {Colors} from 'react-native/Libraries/NewAppScreen';
 
 declare var global: {HermesInternal: null | {}};
 
+import AddButton from './src/assets/add-button.svg';
+
 const App = () => {
   return (
     <>
@@ -27,6 +29,7 @@ const App = () => {
           <Text style={styles.sectionTitle}>Welcome to Gradual!</Text>
           <Text style={styles.sectionTitle}>Add a task to get started.</Text>
         </View>
+        <AddButton />
       </SafeAreaView>
     </>
   );
@@ -40,7 +43,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   initialTip: {
-    height: '100%',
     display: 'flex',
     paddingHorizontal: 24,
     justifyContent: 'center',
