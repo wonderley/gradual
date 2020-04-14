@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {SafeAreaView, StyleSheet, View, Text, StatusBar} from 'react-native';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
@@ -8,6 +8,8 @@ declare var global: {HermesInternal: null | {}};
 import AddButton from './src/assets/add-button.svg';
 
 const App = () => {
+  const [tasks, setTasks] = useState([] as Array<{}>);
+  const showInitialTip = !tasks.length;
   return (
     <>
       <StatusBar barStyle="dark-content" />
@@ -16,17 +18,25 @@ const App = () => {
           <View style={styles.header}>
             <Text style={styles.sectionTitle}>Thursday, April 9th</Text>
           </View>
-          <View style={styles.initialTip}>
-            <Text style={styles.sectionTitle}>Welcome to Gradual!</Text>
-            <Text style={styles.sectionTitle}>Add a task to get started.</Text>
-          </View>
-          <View style={styles.addButton}>
+          {showInitialTip && (
+            <View style={styles.initialTip}>
+              <Text style={styles.sectionTitle}>Welcome to Gradual!</Text>
+              <Text style={styles.sectionTitle}>
+                Add a task to get started.
+              </Text>
+            </View>
+          )}
+          <View style={styles.addButton} onTouchEnd={onButtonPress}>
             <AddButton />
           </View>
         </View>
       </SafeAreaView>
     </>
   );
+
+  function onButtonPress() {
+    setTasks([{}]);
+  }
 };
 
 const styles = StyleSheet.create({
