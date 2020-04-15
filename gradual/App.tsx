@@ -22,7 +22,6 @@ const App = () => {
       key: string;
     }>,
   );
-  const showInitialTip = !tasks.length;
   return (
     <>
       <StatusBar barStyle="dark-content" />
@@ -31,30 +30,8 @@ const App = () => {
           <View style={styles.header}>
             <Text style={styles.sectionTitle}>Thursday, April 9th</Text>
           </View>
-          {showInitialTip && (
-            <View style={styles.initialTip}>
-              <Text style={styles.sectionTitle}>Welcome to Gradual!</Text>
-              <Text style={styles.sectionTitle}>
-                Add a task to get started.
-              </Text>
-            </View>
-          )}
-          {!!tasks.length && (
-            <FlatList
-              data={tasks}
-              renderItem={({item, index, separators}) => (
-                <TouchableHighlight
-                  key={index}
-                  onPress={() => {}}
-                  onShowUnderlay={separators.highlight}
-                  onHideUnderlay={separators.unhighlight}>
-                  <View>
-                    <Text>{item.name}</Text>
-                  </View>
-                </TouchableHighlight>
-              )}
-            />
-          )}
+          {renderInitialTip()}
+          {renderTaskList()}
           <View style={styles.addButton} onTouchEnd={onButtonPress}>
             <AddButton />
           </View>
@@ -70,6 +47,40 @@ const App = () => {
         key: 'asdf',
       },
     ]);
+  }
+
+  function renderInitialTip() {
+    if (tasks.length) {
+      return undefined;
+    }
+    return (
+      <View style={styles.initialTip}>
+        <Text style={styles.sectionTitle}>Welcome to Gradual!</Text>
+        <Text style={styles.sectionTitle}>Add a task to get started.</Text>
+      </View>
+    );
+  }
+
+  function renderTaskList() {
+    if (!tasks.length) {
+      return undefined;
+    }
+    return (
+      <FlatList
+        data={tasks}
+        renderItem={({item, index, separators}) => (
+          <TouchableHighlight
+            key={index}
+            onPress={() => {}}
+            onShowUnderlay={separators.highlight}
+            onHideUnderlay={separators.unhighlight}>
+            <View>
+              <Text>{item.name}</Text>
+            </View>
+          </TouchableHighlight>
+        )}
+      />
+    );
   }
 };
 
