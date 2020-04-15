@@ -20,6 +20,7 @@ const App = () => {
     [] as Array<{
       name: string;
       key: string;
+      repeat: string;
     }>,
   );
   return (
@@ -45,6 +46,7 @@ const App = () => {
       {
         name: 'Go for a run',
         key: 'asdf',
+        repeat: 'Daily',
       },
     ]);
   }
@@ -66,7 +68,7 @@ const App = () => {
       return undefined;
     }
     return (
-      <FlatList
+      <FlatList style={styles.list}
         data={tasks}
         renderItem={({item, index, separators}) => (
           <TouchableHighlight
@@ -74,8 +76,9 @@ const App = () => {
             onPress={() => {}}
             onShowUnderlay={separators.highlight}
             onHideUnderlay={separators.unhighlight}>
-            <View>
-              <Text>{item.name}</Text>
+            <View style={styles.listItem}>
+              <Text style={styles.listText}>{item.name}</Text>
+              <Text style={styles.listText}>{item.repeat}</Text>
             </View>
           </TouchableHighlight>
         )}
@@ -106,6 +109,16 @@ const styles = StyleSheet.create({
   addButton: {
     width: '100%',
     alignItems: 'center',
+  },
+  list: {
+    width: '100%',
+  },
+  listItem: {
+    paddingHorizontal: 10,
+  },
+  listText: {
+    fontSize: 18,
+    fontWeight: '600',
   },
 });
 
