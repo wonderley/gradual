@@ -1,5 +1,13 @@
 import React, {useState} from 'react';
-import {SafeAreaView, StyleSheet, View, Text, StatusBar} from 'react-native';
+import {
+  SafeAreaView,
+  StyleSheet,
+  View,
+  Text,
+  StatusBar,
+  FlatList,
+  TouchableHighlight,
+} from 'react-native';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 
@@ -8,7 +16,12 @@ declare var global: {HermesInternal: null | {}};
 import AddButton from './src/assets/add-button.svg';
 
 const App = () => {
-  const [tasks, setTasks] = useState([] as Array<{}>);
+  const [tasks, setTasks] = useState(
+    [] as Array<{
+      name: string;
+      key: string;
+    }>,
+  );
   const showInitialTip = !tasks.length;
   return (
     <>
@@ -26,6 +39,22 @@ const App = () => {
               </Text>
             </View>
           )}
+          {!!tasks.length && (
+            <FlatList
+              data={tasks}
+              renderItem={({item, index, separators}) => (
+                <TouchableHighlight
+                  key={index}
+                  onPress={() => {}}
+                  onShowUnderlay={separators.highlight}
+                  onHideUnderlay={separators.unhighlight}>
+                  <View>
+                    <Text>{item.name}</Text>
+                  </View>
+                </TouchableHighlight>
+              )}
+            />
+          )}
           <View style={styles.addButton} onTouchEnd={onButtonPress}>
             <AddButton />
           </View>
@@ -35,7 +64,12 @@ const App = () => {
   );
 
   function onButtonPress() {
-    setTasks([{}]);
+    setTasks([
+      {
+        name: 'Go for a run',
+        key: 'asdf',
+      },
+    ]);
   }
 };
 
