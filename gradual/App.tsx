@@ -7,6 +7,7 @@ import {
   StatusBar,
   FlatList,
   TouchableHighlight,
+  TextInput,
 } from 'react-native';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
@@ -21,6 +22,7 @@ const App = () => {
       name: string;
       key: string;
       repeat: string;
+      editing: boolean;
     }>,
   );
   return (
@@ -45,8 +47,15 @@ const App = () => {
     setTasks([
       {
         name: 'Go for a run',
-        key: 'asdf',
+        key: '1',
         repeat: 'Daily',
+        editing: false,
+      },
+      {
+        name: '',
+        key: '2',
+        repeat: '',
+        editing: true,
       },
     ]);
   }
@@ -68,7 +77,8 @@ const App = () => {
       return undefined;
     }
     return (
-      <FlatList style={styles.list}
+      <FlatList
+        style={styles.list}
         data={tasks}
         renderItem={({item, index, separators}) => (
           <TouchableHighlight
@@ -76,10 +86,25 @@ const App = () => {
             onPress={() => {}}
             onShowUnderlay={separators.highlight}
             onHideUnderlay={separators.unhighlight}>
-            <View style={styles.listItem}>
-              <Text style={styles.listText}>{item.name}</Text>
-              <Text style={styles.listText}>{item.repeat}</Text>
-            </View>
+            {item.editing ? (
+              <View style={styles.listItem}>
+                <TextInput
+                  style={styles.listText}
+                  value={item.name}
+                  placeholder={'Task Name'}
+                />
+                <TextInput
+                  style={styles.listText}
+                  value={item.repeat}
+                  placeholder={'Repeat?'}
+                />
+              </View>
+            ) : (
+              <View style={styles.listItem}>
+                <Text style={styles.listText}>{item.name}</Text>
+                <Text style={styles.listText}>{item.repeat}</Text>
+              </View>
+            )}
           </TouchableHighlight>
         )}
       />
