@@ -16,6 +16,9 @@ declare var global: {HermesInternal: null | {}};
 
 import AddButton from './src/assets/add-button.svg';
 
+// Used for unique list item keys
+let ITEM_COUNT = 0;
+
 const App = () => {
   const [tasks, setTasks] = useState(
     [] as Array<{
@@ -45,19 +48,24 @@ const App = () => {
 
   function onButtonPress() {
     setTasks([
-      {
-        name: 'Go for a run',
-        key: '1',
-        repeat: 'Daily',
-        editing: false,
-      },
+      ...tasks,
       {
         name: '',
-        key: '2',
+        key: String(ITEM_COUNT++),
         repeat: '',
         editing: true,
       },
     ]);
+  }
+
+  function updateTaskName(key: string, value: string) {
+    const updatedTasks = [...tasks];
+    const task = updatedTasks.find((t) => t.key === key);
+    if (!task) {
+      throw new Error(`Failed to find task with key ${key}`);
+    }
+    task.name = value;
+    setTasks(updatedTasks);
   }
 
   function renderInitialTip() {
@@ -80,9 +88,9 @@ const App = () => {
       <FlatList
         style={styles.list}
         data={tasks}
-        renderItem={({item, index, separators}) => (
+        renderItem={({item, separators}) => (
           <TouchableHighlight
-            key={index}
+            key={item.key}
             onPress={() => {}}
             onShowUnderlay={separators.highlight}
             onHideUnderlay={separators.unhighlight}>
@@ -92,6 +100,9 @@ const App = () => {
                   style={styles.listText}
                   value={item.name}
                   placeholder={'Task Name'}
+                  onChangeText={(text: string) => {
+                    updateTaskName(item.key, text);
+                  }}
                 />
                 <TextInput
                   style={styles.listText}
