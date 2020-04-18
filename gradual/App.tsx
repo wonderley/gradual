@@ -16,18 +16,16 @@ declare var global: {HermesInternal: null | {}};
 
 import AddButton from './src/assets/add-button.svg';
 
-// Used for unique list item keys
-let ITEM_COUNT = 0;
+interface Task {
+  name: string;
+  key: string;
+  repeat: string;
+  editing: boolean;
+}
 
 const App = () => {
-  const [tasks, setTasks] = useState(
-    [] as Array<{
-      name: string;
-      key: string;
-      repeat: string;
-      editing: boolean;
-    }>,
-  );
+  const [tasks, setTasks] = useState([] as Array<Task>);
+  const [nextItemKey, setNextItemKey] = useState(0);
   return (
     <>
       <StatusBar barStyle="dark-content" />
@@ -51,11 +49,12 @@ const App = () => {
       ...tasks,
       {
         name: '',
-        key: String(ITEM_COUNT++),
+        key: String(nextItemKey),
         repeat: '',
         editing: true,
       },
     ]);
+    setNextItemKey(nextItemKey + 1);
   }
 
   function updateTaskName(key: string, value: string) {
@@ -66,6 +65,10 @@ const App = () => {
     }
     task.name = value;
     setTasks(updatedTasks);
+  }
+
+  function listItemStyle(item: Task): any {
+    return item === tasks[0] ? styles.topListItem : styles.listItem;
   }
 
   function renderInitialTip() {
@@ -95,7 +98,7 @@ const App = () => {
             onShowUnderlay={separators.highlight}
             onHideUnderlay={separators.unhighlight}>
             {item.editing ? (
-              <View style={styles.listItem}>
+              <View style={listItemStyle(item)}>
                 <TextInput
                   style={styles.listText}
                   value={item.name}
@@ -111,7 +114,7 @@ const App = () => {
                 />
               </View>
             ) : (
-              <View style={styles.listItem}>
+              <View style={listItemStyle(item)}>
                 <Text style={styles.listText}>{item.name}</Text>
                 <Text style={styles.listText}>{item.repeat}</Text>
               </View>
@@ -150,11 +153,23 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   listItem: {
-    paddingHorizontal: 10,
+    marginHorizontal: 10,
+    paddingVertical: 5,
+    borderBottomWidth: 1,
+    borderColor: 'gray',
+  },
+  topListItem: {
+    borderTopWidth: 1,
+    // listItem
+    marginHorizontal: 10,
+    paddingVertical: 5,
+    borderBottomWidth: 1,
+    borderColor: 'gray',
   },
   listText: {
     fontSize: 18,
     fontWeight: '600',
+    marginVertical: 5,
   },
 });
 
