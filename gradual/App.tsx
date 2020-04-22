@@ -9,6 +9,7 @@ import {
   TouchableHighlight,
   TextInput,
 } from 'react-native';
+import RNPickerSelect from 'react-native-picker-select';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 
@@ -19,8 +20,13 @@ import AddButton from './src/assets/add-button.svg';
 interface Task {
   name: string;
   key: string;
-  repeat: string;
+  repeat: TaskRepeat;
   editing: boolean;
+}
+
+enum TaskRepeat {
+  None = 'none',
+  Daily = 'daily',
 }
 
 const App = () => {
@@ -50,7 +56,7 @@ const App = () => {
       {
         name: '',
         key: String(nextItemKey),
-        repeat: '',
+        repeat: TaskRepeat.None,
         editing: true,
       },
     ]);
@@ -64,6 +70,16 @@ const App = () => {
       throw new Error(`Failed to find task with key ${key}`);
     }
     task.name = value;
+    setTasks(updatedTasks);
+  }
+
+  function updateTaskRepeat(key: string, value: TaskRepeat) {
+    const updatedTasks = [...tasks];
+    const task = updatedTasks.find((t) => t.key === key);
+    if (!task) {
+      throw new Error(`Failed to find task with key ${key}`);
+    }
+    task.repeat = value;
     setTasks(updatedTasks);
   }
 
@@ -107,10 +123,24 @@ const App = () => {
                     updateTaskName(item.key, text);
                   }}
                 />
-                <TextInput
-                  style={styles.listText}
+                <RNPickerSelect
+                  style={{inputIOS: styles.listText}}
+                  onValueChange={(value) => {
+                    updateTaskRepeat(item.key, value);
+                  }}
+                  placeholder={{
+                    label: "Don't repeat",
+                    value: TaskRepeat.None,
+                    key: item.key + TaskRepeat.None,
+                  }}
                   value={item.repeat}
-                  placeholder={'Repeat?'}
+                  items={[
+                    {
+                      label: 'Daily',
+                      value: TaskRepeat.Daily,
+                      key: item.key + TaskRepeat.Daily,
+                    },
+                  ]}
                 />
               </View>
             ) : (
