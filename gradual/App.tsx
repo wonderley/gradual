@@ -116,6 +116,7 @@ const App = () => {
             {item.editing ? (
               <View style={listItemStyle(item)}>
                 <TextInput
+                  autoCorrect={false}
                   style={styles.listText}
                   value={item.name}
                   placeholder={'Task Name'}
