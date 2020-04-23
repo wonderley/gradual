@@ -29,6 +29,11 @@ enum TaskRepeat {
   Daily = 'daily',
 }
 
+const taskRepeatLabels = {
+  [TaskRepeat.None]: "Don't repeat",
+  [TaskRepeat.Daily]: 'Daily',
+};
+
 const App = () => {
   const [tasks, setTasks] = useState([] as Array<Task>);
   const [nextItemKey, setNextItemKey] = useState(0);
@@ -51,6 +56,10 @@ const App = () => {
   );
 
   function onButtonPress() {
+    // eslint-disable-next-line no-return-assign
+    tasks.forEach((task) => {
+      task.editing = false;
+    });
     setTasks([
       ...tasks,
       {
@@ -126,19 +135,20 @@ const App = () => {
                   }}
                 />
                 <RNPickerSelect
+                  InputAccessoryView={() => null}
                   style={{inputIOS: styles.listText}}
                   onValueChange={(value) => {
                     updateTaskRepeat(item.key, value);
                   }}
                   placeholder={{
-                    label: "Don't repeat",
+                    label: taskRepeatLabels[TaskRepeat.None],
                     value: TaskRepeat.None,
                     key: item.key + TaskRepeat.None,
                   }}
                   value={item.repeat}
                   items={[
                     {
-                      label: 'Daily',
+                      label: taskRepeatLabels[TaskRepeat.Daily],
                       value: TaskRepeat.Daily,
                       key: item.key + TaskRepeat.Daily,
                     },
@@ -148,7 +158,9 @@ const App = () => {
             ) : (
               <View style={listItemStyle(item)}>
                 <Text style={styles.listText}>{item.name}</Text>
-                <Text style={styles.listText}>{item.repeat}</Text>
+                <Text style={styles.listText}>
+                  {taskRepeatLabels[item.repeat]}
+                </Text>
               </View>
             )}
           </TouchableHighlight>
