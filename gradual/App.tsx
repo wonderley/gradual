@@ -119,6 +119,7 @@ const App = () => {
                   autoCorrect={false}
                   style={styles.listText}
                   value={item.name}
+                  autoFocus={true}
                   placeholder={'Task Name'}
                   onChangeText={(text: string) => {
                     updateTaskName(item.key, text);
