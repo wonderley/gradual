@@ -56,7 +56,6 @@ const App = () => {
   );
 
   function onButtonPress() {
-    // eslint-disable-next-line no-return-assign
     tasks.forEach((task) => {
       task.editing = false;
     });
