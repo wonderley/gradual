@@ -1,38 +1,13 @@
 import React, {useState} from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  View,
-  Text,
-  StatusBar,
-  FlatList,
-  TouchableHighlight,
-  TextInput,
-} from 'react-native';
-import RNPickerSelect from 'react-native-picker-select';
+import {SafeAreaView, StyleSheet, View, Text, StatusBar} from 'react-native';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 
 declare var global: {HermesInternal: null | {}};
 
 import AddButton from './src/assets/add-button.svg';
-
-interface Task {
-  name: string;
-  key: string;
-  repeat: TaskRepeat;
-  editing: boolean;
-}
-
-enum TaskRepeat {
-  None = 'none',
-  Daily = 'daily',
-}
-
-const taskRepeatLabels = {
-  [TaskRepeat.None]: "Don't repeat",
-  [TaskRepeat.Daily]: 'Daily',
-};
+import {Task, TaskRepeat} from './src/task';
+import {TaskList} from './src/task-list';
 
 const App = () => {
   const [tasks, setTasks] = useState([] as Array<Task>);
@@ -46,7 +21,11 @@ const App = () => {
             <Text style={styles.sectionTitle}>Thursday, April 9th</Text>
           </View>
           {renderInitialTip()}
-          {renderTaskList()}
+          <TaskList
+            tasks={tasks}
+            updateTaskName={updateTaskName}
+            updateTaskRepeat={updateTaskRepeat}
+          />
           <View style={styles.addButton} onTouchEnd={onButtonPress}>
             <AddButton />
           </View>
@@ -91,10 +70,6 @@ const App = () => {
     setTasks(updatedTasks);
   }
 
-  function listItemStyle(item: Task): any {
-    return item === tasks[0] ? styles.topListItem : styles.listItem;
-  }
-
   function renderInitialTip() {
     if (tasks.length) {
       return undefined;
@@ -104,67 +79,6 @@ const App = () => {
         <Text style={styles.sectionTitle}>Welcome to Gradual!</Text>
         <Text style={styles.sectionTitle}>Add a task to get started.</Text>
       </View>
-    );
-  }
-
-  function renderTaskList() {
-    if (!tasks.length) {
-      return undefined;
-    }
-    return (
-      <FlatList
-        style={styles.list}
-        data={tasks}
-        renderItem={({item, separators}) => (
-          <TouchableHighlight
-            key={item.key}
-            onPress={() => {}}
-            onShowUnderlay={separators.highlight}
-            onHideUnderlay={separators.unhighlight}>
-            {item.editing ? (
-              <View style={listItemStyle(item)}>
-                <TextInput
-                  autoCorrect={false}
-                  style={styles.listText}
-                  value={item.name}
-                  autoFocus={true}
-                  placeholder={'Task Name'}
-                  onChangeText={(text: string) => {
-                    updateTaskName(item.key, text);
-                  }}
-                />
-                <RNPickerSelect
-                  InputAccessoryView={() => null}
-                  style={{inputIOS: styles.listText}}
-                  onValueChange={(value) => {
-                    updateTaskRepeat(item.key, value);
-                  }}
-                  placeholder={{
-                    label: taskRepeatLabels[TaskRepeat.None],
-                    value: TaskRepeat.None,
-                    key: item.key + TaskRepeat.None,
-                  }}
-                  value={item.repeat}
-                  items={[
-                    {
-                      label: taskRepeatLabels[TaskRepeat.Daily],
-                      value: TaskRepeat.Daily,
-                      key: item.key + TaskRepeat.Daily,
-                    },
-                  ]}
-                />
-              </View>
-            ) : (
-              <View style={listItemStyle(item)}>
-                <Text style={styles.listText}>{item.name}</Text>
-                <Text style={styles.listText}>
-                  {taskRepeatLabels[item.repeat]}
-                </Text>
-              </View>
-            )}
-          </TouchableHighlight>
-        )}
-      />
     );
   }
 };
@@ -191,28 +105,6 @@ const styles = StyleSheet.create({
   addButton: {
     width: '100%',
     alignItems: 'center',
-  },
-  list: {
-    width: '100%',
-  },
-  listItem: {
-    marginHorizontal: 10,
-    paddingVertical: 5,
-    borderBottomWidth: 1,
-    borderColor: 'gray',
-  },
-  topListItem: {
-    borderTopWidth: 1,
-    // listItem
-    marginHorizontal: 10,
-    paddingVertical: 5,
-    borderBottomWidth: 1,
-    borderColor: 'gray',
-  },
-  listText: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginVertical: 5,
   },
 });
 
