@@ -26,6 +26,7 @@ export const TaskList = (props: Props) => {
       data={props.tasks}
       renderItem={({item, separators}) => (
         <TouchableHighlight
+          underlayColor="#DDDDDD"
           key={item.key}
           onPress={() => {}}
           onShowUnderlay={separators.highlight}
