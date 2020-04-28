@@ -34,7 +34,7 @@ export const TaskList = (props: Props) => {
           {item.editing ? (
             <View style={listItemStyle(item)}>
               <TextInput
-                autoCorrect={false}
+                returnKeyType={'next'}
                 style={styles.listText}
                 value={item.name}
                 autoFocus={true}
@@ -42,10 +42,16 @@ export const TaskList = (props: Props) => {
                 onChangeText={(text: string) => {
                   props.updateTaskName(item.key, text);
                 }}
+                onSubmitEditing={() => {
+                  focusNext(1);
+                }}
               />
               <RNPickerSelect
-                InputAccessoryView={() => null}
-                style={{inputIOS: styles.listText}}
+                style={{
+                  inputIOS: styles.listText,
+                  chevronUp: styles.hideChevron,
+                  chevronDown: styles.hideChevron,
+                }}
                 onValueChange={(value) => {
                   props.updateTaskRepeat(item.key, value);
                 }}
@@ -68,7 +74,9 @@ export const TaskList = (props: Props) => {
             <View style={listItemStyle(item)}>
               <Text style={styles.listText}>{item.name}</Text>
               <Text style={styles.listText}>
-                {TaskRepeatLabels[item.repeat]}
+                {item.repeat === TaskRepeat.None
+                  ? ''
+                  : TaskRepeatLabels[item.repeat]}
               </Text>
             </View>
           )}
@@ -79,6 +87,10 @@ export const TaskList = (props: Props) => {
 
   function listItemStyle(item: Task): any {
     return item === props.tasks[0] ? styles.topListItem : styles.listItem;
+  }
+
+  function focusNext(index: number) {
+    console.log('Focus ' + index);
   }
 };
 
@@ -104,5 +116,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
     marginVertical: 5,
+  },
+  hideChevron: {
+    display: 'none',
   },
 })
