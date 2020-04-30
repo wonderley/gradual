@@ -25,6 +25,7 @@ const App = () => {
             tasks={tasks}
             updateTaskName={updateTaskName}
             updateTaskRepeat={updateTaskRepeat}
+            saveEdits={saveEdits}
           />
           <View style={styles.addButton} onTouchEnd={onButtonPress}>
             <AddButton />
@@ -67,6 +68,16 @@ const App = () => {
       throw new Error(`Failed to find task with key ${key}`);
     }
     task.repeat = value;
+    setTasks(updatedTasks);
+  }
+
+  function saveEdits(key: string) {
+    const updatedTasks = [...tasks];
+    const task = updatedTasks.find((t) => t.key === key);
+    if (!task) {
+      throw new Error(`Failed to find task with key ${key}`);
+    }
+    task.editing = false;
     setTasks(updatedTasks);
   }
 

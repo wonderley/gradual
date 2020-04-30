@@ -8,6 +8,7 @@ interface Props {
   tasks: Task[];
   updateTaskName: (key: string, value: string) => void;
   updateTaskRepeat: (key: string, value: TaskRepeat) => void;
+  saveEdits: (key: string) => void;
 }
 
 export const TaskList = (props: Props) => {
@@ -29,6 +30,7 @@ export const TaskList = (props: Props) => {
             <InlineEdit
               item={item}
               isTop={item === props.tasks[0]}
+              onSave={() => props.saveEdits(item.key)}
               {...props}
             />
           ) : (

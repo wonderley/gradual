@@ -9,11 +9,18 @@ interface Props {
   item: Task;
   updateTaskName: (key: string, value: string) => void;
   updateTaskRepeat: (key: string, value: TaskRepeat) => void;
+  onSave: () => void;
 }
 
 export const InlineEdit = (props: Props) => {
   const {isTop, item} = props;
+  const inputRefs: {
+    repeat: null | RNPickerSelect;
+  } = {
+    repeat: null,
+  };
   return (
+    // TODO: Maybe the View should be outside this component
     <View style={listItemStyle(isTop)}>
       <TextInput
         returnKeyType={'next'}
@@ -25,7 +32,8 @@ export const InlineEdit = (props: Props) => {
           props.updateTaskName(item.key, text);
         }}
         onSubmitEditing={() => {
-          focusNext(1);
+          // togglePicker isn't in the index.d.ts file
+          inputRefs.repeat && (inputRefs.repeat as any).togglePicker();
         }}
       />
       <RNPickerSelect
@@ -36,6 +44,10 @@ export const InlineEdit = (props: Props) => {
         }}
         onValueChange={(value) => {
           props.updateTaskRepeat(item.key, value);
+        }}
+        onClose={() => {
+          // This is the last widget, so editing is done
+          props.onSave();
         }}
         placeholder={{
           label: TaskRepeatLabels[TaskRepeat.None],
@@ -50,11 +62,10 @@ export const InlineEdit = (props: Props) => {
             key: item.key + TaskRepeat.Daily,
           },
         ]}
+        ref={(input) => {
+          inputRefs.repeat = input;
+        }}
       />
     </View>
   );
-
-  function focusNext(index: number) {
-    console.log('Focus ' + index);
-  }
 };
