@@ -1,5 +1,12 @@
-import React, {useState} from 'react';
-import {SafeAreaView, StyleSheet, View, Text, StatusBar} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {
+  AsyncStorage,
+  SafeAreaView,
+  StyleSheet,
+  View,
+  Text,
+  StatusBar,
+} from 'react-native';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 
@@ -10,6 +17,9 @@ import {TaskList} from './src/task-list';
 const App = () => {
   const [tasks, setTasks] = useState([] as Array<Task>);
   const [nextItemKey, setNextItemKey] = useState(0);
+  useEffect(() => {
+    retrieveData().then(setTasks);
+  }, []);
   return (
     <>
       <StatusBar barStyle="dark-content" />
@@ -77,6 +87,7 @@ const App = () => {
     }
     task.editing = false;
     setTasks(updatedTasks);
+    storeData();
   }
 
   function renderInitialTip() {
@@ -89,6 +100,32 @@ const App = () => {
         <Text style={styles.sectionTitle}>Add a task to get started.</Text>
       </View>
     );
+  }
+
+  async function storeData() {
+    console.log('In storeData');
+    try {
+      await AsyncStorage.setItem('tasks', JSON.stringify(tasks));
+    } catch (error) {
+      throw new Error(`Error storing app data: ${error}`);
+    }
+  }
+
+  async function retrieveData(): Promise<Task[]> {
+    let value: string | null;
+    try {
+      value = await AsyncStorage.getItem('tasks');
+    } catch (error) {
+      throw new Error(`Error retrieving app data: ${error}`);
+    }
+    if (!value) {
+      return [];
+    }
+    try {
+      return JSON.parse(value);
+    } catch (error) {
+      throw new Error(`Error parsing task list: ${error}`);
+    }
   }
 };
 
