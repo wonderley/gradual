@@ -3,8 +3,6 @@ import {SafeAreaView, StyleSheet, View, Text, StatusBar} from 'react-native';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 
-declare var global: {HermesInternal: null | {}};
-
 import AddButton from './src/assets/add-button.svg';
 import {Task, TaskRepeat} from './src/task';
 import {TaskList} from './src/task-list';
