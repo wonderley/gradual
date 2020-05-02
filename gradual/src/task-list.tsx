@@ -1,5 +1,6 @@
 import React from 'react';
-import {View, Text, FlatList, TouchableHighlight} from 'react-native';
+import {SwipeListView} from 'react-native-swipe-list-view';
+import {View, Text, TouchableHighlight} from 'react-native';
 import {InlineEdit} from './inline-edit';
 import {Styles, listItemStyle} from './styles';
 import {Task, TaskRepeat, TaskRepeatLabels} from './task';
@@ -16,7 +17,7 @@ export const TaskList = (props: Props) => {
     return null;
   }
   return (
-    <FlatList
+    <SwipeListView
       style={Styles.list}
       data={props.tasks}
       renderItem={({item, separators}) => (
