@@ -1,12 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import {
-  AsyncStorage,
-  SafeAreaView,
-  StyleSheet,
-  View,
-  Text,
-  StatusBar,
-} from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
+import {SafeAreaView, StyleSheet, View, Text, StatusBar} from 'react-native';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 
