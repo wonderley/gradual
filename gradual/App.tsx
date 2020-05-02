@@ -18,7 +18,10 @@ const App = () => {
   const [tasks, setTasks] = useState([] as Array<Task>);
   const [nextItemKey, setNextItemKey] = useState(0);
   useEffect(() => {
-    retrieveData().then(setTasks);
+    retrieveData().then((retrievedTasks) => {
+      setNextItemKey(retrievedTasks.length);
+      setTasks(retrievedTasks);
+    });
   }, []);
   return (
     <>
@@ -103,7 +106,6 @@ const App = () => {
   }
 
   async function storeData() {
-    console.log('In storeData');
     try {
       await AsyncStorage.setItem('tasks', JSON.stringify(tasks));
     } catch (error) {
