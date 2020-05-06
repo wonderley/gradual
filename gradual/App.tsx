@@ -11,6 +11,7 @@ import {TaskList} from './src/task-list';
 const App = () => {
   const [tasks, setTasks] = useState([] as Array<Task>);
   const [nextItemKey, setNextItemKey] = useState(0);
+  const [shownDay] = useState(nowInDays());
   useEffect(() => {
     retrieveData().then((retrievedTasks) => {
       setNextItemKey(retrievedTasks.length);
@@ -23,7 +24,7 @@ const App = () => {
       <SafeAreaView>
         <View style={styles.container}>
           <View style={styles.header}>
-            <Text style={styles.sectionTitle}>Thursday, April 9th</Text>
+            <Text style={styles.sectionTitle}>{dayToDateString(shownDay)}</Text>
           </View>
           {renderInitialTip()}
           <TaskList
@@ -122,6 +123,32 @@ const App = () => {
     } catch (error) {
       throw new Error(`Error parsing task list: ${error}`);
     }
+  }
+
+  function nowInSeconds(): number {
+    return Math.floor(new Date().getTime() / 1000);
+  }
+
+  function nowInDays(): number {
+    return Math.floor(nowInSeconds() / 60 / 60 / 24);
+  }
+
+  function dayToSeconds(day: number) {
+    return day * 60 * 60 * 24;
+  }
+
+  function dayToDate(day: number): Date {
+    return new Date(dayToSeconds(day) * 1000);
+  }
+
+  function dayToDateString(day: number): string {
+    // TODO: Handle ordinals and i18n
+    // https://stackoverflow.com/a/58525980/1478289
+    return dayToDate(day).toLocaleDateString(undefined, {
+      weekday: 'long',
+      month: 'long',
+      day: 'numeric',
+    });
   }
 };
 
