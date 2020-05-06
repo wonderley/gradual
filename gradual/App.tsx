@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import moment, {Moment} from 'moment';
 import AsyncStorage from '@react-native-community/async-storage';
 import {SafeAreaView, StyleSheet, View, Text, StatusBar} from 'react-native';
 
@@ -11,7 +12,7 @@ import {TaskList} from './src/task-list';
 const App = () => {
   const [tasks, setTasks] = useState([] as Array<Task>);
   const [nextItemKey, setNextItemKey] = useState(0);
-  const [shownDay] = useState(nowInDays());
+  const [shownDay] = useState(moment());
   useEffect(() => {
     retrieveData().then((retrievedTasks) => {
       setNextItemKey(retrievedTasks.length);
@@ -24,7 +25,9 @@ const App = () => {
       <SafeAreaView>
         <View style={styles.container}>
           <View style={styles.header}>
-            <Text style={styles.sectionTitle}>{dayToDateString(shownDay)}</Text>
+            <Text style={styles.sectionTitle}>
+              {momentToDateString(shownDay)}
+            </Text>
           </View>
           {renderInitialTip()}
           <TaskList
@@ -133,21 +136,14 @@ const App = () => {
     return Math.floor(nowInSeconds() / 60 / 60 / 24);
   }
 
-  function dayToSeconds(day: number) {
-    return day * 60 * 60 * 24;
-  }
-
-  function dayToDate(day: number): Date {
-    return new Date(dayToSeconds(day) * 1000);
-  }
-
-  function dayToDateString(day: number): string {
-    // TODO: Handle ordinals and i18n
-    // https://stackoverflow.com/a/58525980/1478289
-    return dayToDate(day).toLocaleDateString(undefined, {
-      weekday: 'long',
-      month: 'long',
-      day: 'numeric',
+  function momentToDateString(m: Moment): string {
+    return m.calendar(null, {
+      sameDay: '[Today]',
+      nextDay: '[Tomorrow]',
+      nextWeek: 'dddd',
+      lastDay: '[Yesterday]',
+      lastWeek: '[Last] dddd',
+      sameElse: 'DD/MM/YYYY',
     });
   }
 };
